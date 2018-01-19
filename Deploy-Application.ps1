@@ -149,6 +149,17 @@ Try {
 		## Add a shortcut to the Start Menu
 		Copy-File -Path "$dirSupportFiles\Oracle SQL Developer.lnk" -Destination "$envCommonStartMenuPrograms"
 
+		# Set the JDK path to JDK 64-Bit Update 151 using product.conf
+		Get-ChildItem -Path "${envSystemDrive}\Users" -Force | Where-Object { $_.PSIsContainer } | ForEach-Object {
+			$appDataRoamingFolder = $_.FullName + "\AppData\Roaming"
+			If (Test-Path -Path $appDataRoamingFolder -PathType 'Container') {
+				Write-Log -Message "Copying JDK path configuration for $_" -Severity 1 -Source $deployAppScriptFriendlyName
+				New-Folder -Path "${appDataRoamingFolder}\sqldeveloper\17.4.0" -ContinueOnError $True
+				Copy-File -Path "${dirSupportFiles}\product.conf" -Destination "${appDataRoamingFolder}\sqldeveloper\17.4.0"
+			} Else {
+				Write-Log -Message "A roaming application data folder was not found for $_" -Severity 2 -Source $deployAppScriptFriendlyName
+				}
+		}
 		## Display a message at the end of the install
 		#If (-not $useDefaultMsi) {Show-InstallationPrompt -Message "${appVendor} ${appName} ${appVersion} has been sucessfully installed." -ButtonRightText 'OK' -Icon Information -NoWait}
 	}
@@ -214,8 +225,8 @@ Catch {
 # SIG # Begin signature block
 # MIIU4wYJKoZIhvcNAQcCoIIU1DCCFNACAQExDzANBglghkgBZQMEAgEFADB5Bgor
 # BgEEAYI3AgEEoGswaTA0BgorBgEEAYI3AgEeMCYCAwEAAAQQH8w7YFlLCE63JNLG
-# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBmre6a3EWv5VFt
-# CpdQlJFucSNZc+0zPobPKjC8K9jBO6CCD4cwggQUMIIC/KADAgECAgsEAAAAAAEv
+# KX7zUQIBAAIBAAIBAAIBAAIBADAxMA0GCWCGSAFlAwQCAQUABCBpQfeq2T8LdpBd
+# 9Ve04XfuW0u/9iXRefMd5BHJ3dtP3aCCD4cwggQUMIIC/KADAgECAgsEAAAAAAEv
 # TuFS1zANBgkqhkiG9w0BAQUFADBXMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xv
 # YmFsU2lnbiBudi1zYTEQMA4GA1UECxMHUm9vdCBDQTEbMBkGA1UEAxMSR2xvYmFs
 # U2lnbiBSb290IENBMB4XDTExMDQxMzEwMDAwMFoXDTI4MDEyODEyMDAwMFowUjEL
@@ -302,26 +313,26 @@ Catch {
 # FgNlZHUxGTAXBgoJkiaJk/IsZAEZFgltc3VkZW52ZXIxFTATBgoJkiaJk/IsZAEZ
 # FgV3aW5hZDEZMBcGA1UEAxMQd2luYWQtVk1XQ0EwMS1DQQITfwAAACITuo77mvOv
 # 9AABAAAAIjANBglghkgBZQMEAgEFAKBmMBgGCisGAQQBgjcCAQwxCjAIoAKAAKEC
-# gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIJpI
-# 5A+iHZWhJsSTL+HbOCPDlhVkh3MPZ/Bew9STECx9MA0GCSqGSIb3DQEBAQUABIIB
-# AFOttG73NhKsiekhQHuOz7JBh14spT9puwO5Bq5naaptXU3okP5QG7DPH8bA4R5A
-# 8N343C6rCG1YkLBQo/Jkd4wxKIMkkhnfhH0y7whEqdgP2XhCSLuLEYag8KRny+F8
-# ec14FZWA5VTObCGX6Ozy9YrKfXmIvysJYgr1EGG8SQOBfkK1YJ2B//zUl3RFyC61
-# AsWtNDg8QI9XWsNQtAQy3POp64JlhEhW6YOi1OxqBIcf9uOgqlYF2awJ/ThERtw6
-# F5IUYpuT5V50HKEuSQNyZgZZwUa6/GDD8RShFQv0jwc+t3YXvSOpxhQFyUJ5zrQw
-# PWb2lP+K74VstLFHCGbTGc+hggKiMIICngYJKoZIhvcNAQkGMYICjzCCAosCAQEw
+# gAAwGQYJKoZIhvcNAQkDMQwGCisGAQQBgjcCAQQwLwYJKoZIhvcNAQkEMSIEIKd/
+# 2lmLyq5YWHyxAFxKv3yNNFuZi/IONDoFp5kTh8obMA0GCSqGSIb3DQEBAQUABIIB
+# AGqNeKUyBzurc7YKPTYNrkg5BYMVgALjeyCpgZeKtYs0w6bsY8Gh/RMC/QcGPpLz
+# t1Ase2eLEonbIOgR8BF50cfgykbs2MXY9FwkeuW34HhbndB0W0q1QvXvS/lyqofb
+# 51iKUrOaQ8Ntrp7oiBJteqctvdO5dAEsi3BQXR0hd0DDbBTW05xt6Y4M8pIbUqBn
+# I96UhnHdEEuFRxg7i0VWtKNvWyrQBmfNYr/BD3RzXA+fybIBtfuJ1l0sMLonkygO
+# ZXKlOHY9BA3mq0u2WQxD1mxmEPZxe5AEd0oYT4njOmLOMThDoWw1fs5v96Y4fvKU
+# BQ1LF96kVrD6+9r/A10AYH6hggKiMIICngYJKoZIhvcNAQkGMYICjzCCAosCAQEw
 # aDBSMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTEoMCYG
 # A1UEAxMfR2xvYmFsU2lnbiBUaW1lc3RhbXBpbmcgQ0EgLSBHMgISESHWmadklz7x
 # +EJ+6RnMU0EUMAkGBSsOAwIaBQCggf0wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEH
-# ATAcBgkqhkiG9w0BCQUxDxcNMTgwMTE4MTc1NTUxWjAjBgkqhkiG9w0BCQQxFgQU
-# ZB7pZQqpD366jir4zWNK/sD82nQwgZ0GCyqGSIb3DQEJEAIMMYGNMIGKMIGHMIGE
+# ATAcBgkqhkiG9w0BCQUxDxcNMTgwMTE5MjIwODE0WjAjBgkqhkiG9w0BCQQxFgQU
+# RsllI21fepnqXPmEwx1sZzDXtRYwgZ0GCyqGSIb3DQEJEAIMMYGNMIGKMIGHMIGE
 # BBRjuC+rYfWDkJaVBQsAJJxQKTPseTBsMFakVDBSMQswCQYDVQQGEwJCRTEZMBcG
 # A1UEChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBUaW1l
 # c3RhbXBpbmcgQ0EgLSBHMgISESHWmadklz7x+EJ+6RnMU0EUMA0GCSqGSIb3DQEB
-# AQUABIIBAFz9M+gZclBpZ+GeWQGpg7p/vnbpPL/n46RVC/n/D2G0Kfnp5X0LqZkc
-# Bz31g6XBil8mBEti6LrhSpHsGNuQG+yanCYg24z/bDMGEY9zjA+qdGwhUTIcY/AQ
-# jWoK4/bjn4/YMoEhJnylis4TsSA8RyhLXOOhQ6+J/CNqKaZaOV2TYxddZcvOCGpn
-# qH97EIkAE1n1j9qA+bcSDqjDOt/3ZLXqLch2/CT/4agRVGPToVWq9Yx6oyMV+5PL
-# +EqSPh+378AAG0IwSiXhyp7x3StRQwOSJLXxEVO+WOaxnaAIe0grEa2YY0aleWpk
-# uLx76ZD8j4zNPMGyMH9eVDwLpvDxafw=
+# AQUABIIBAJEVchDhN6GKMypdqHNFGWWh4tLiVJBaMLWZDrN7HIqobe9UNp+W6KIU
+# k8wKxqwf/Gq3cn9snL17DOWKhc4GNTdh544jXysI5TLarv8BZ/CQWZ4ddikASGTD
+# DzETYIdJTO+7M0aA0JPGr5rQZF0F7TuZqg8AsgVXGcT8kASsOzkfzYx1uQCDs7n5
+# 6NkmJNt7S7H0MdsW/lZINY3GxkMAFXygVpL97e9udKbowtRJUnJQvlzTdW66PbTI
+# WhIHvbx4AiM38J5trFzjWm1kD9vxeMD8MiEfN0AUj8onaYMmwYU5zSYnbfGC7WSt
+# mSUTsO2CKQDXIUKcctviO5b5yP+QjwQ=
 # SIG # End signature block
