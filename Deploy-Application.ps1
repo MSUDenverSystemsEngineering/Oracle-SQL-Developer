@@ -212,7 +212,7 @@ Try {
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
-
+		Remove-ItemProperty -Path $registryPath -Name $tatoo -Force | Out-Null
 
 	}
 	ElseIf ($deploymentType -ieq 'Repair')
