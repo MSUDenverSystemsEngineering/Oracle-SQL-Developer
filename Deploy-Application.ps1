@@ -212,6 +212,10 @@ Try {
 		[string]$installPhase = 'Post-Uninstallation'
 
 		## <Perform Post-Uninstallation tasks here>
+		##Remove Tatoo Registry
+		$registryPath = "HKLM:\Software\appTatoo"
+		$tatoo = "SQL Developer"
+
 		Remove-ItemProperty -Path $registryPath -Name $tatoo -Force | Out-Null
 
 	}
